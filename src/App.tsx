@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ToDoItemComponent from './ToDoItemComponent';
 import ITodoItem from './ITodoItem';
 
@@ -7,10 +7,28 @@ function App() {
   const[description, setDescription] = useState('');
   const[tasksList, setTasksList] = useState<ITodoItem[]>([]);
   const[todoSize, setTodoSize] = useState(0);
+
+  useEffect(() => {
+    let todoItems = window.localStorage.getItem("todos");
+    if(todoItems) {
+      setTasksList(JSON.parse(todoItems));
+    }
+  }, [])
+
+  const clearLocalStorage = () => {
+     window.localStorage.setItem("todos",'');
+     setTasksList([]);
+  }
+
+  // useEffect(() => {
+  //   window.localStorage.setItem("todos", JSON.stringify(tasksList));
+  // }, tasksList)
   
   const addTask = (event: any) => {
     event.preventDefault();
-    setTasksList([...tasksList, {task, description, 'id':todoSize}]);
+    let copyItems = [...tasksList, {task, description, 'id':task+todoSize}];
+    setTasksList(copyItems);
+    window.localStorage.setItem("todos", JSON.stringify(copyItems));
     setTodoSize(todoSize + 1);
     setTask('');
     setDescription('');
@@ -21,7 +39,7 @@ function App() {
 
   if(tasksList.length > 0) {
     rendertask = tasksList.map((item, index) => {
-      return <ToDoItemComponent key={index} item={item} items={tasksList} setTasksList={setTasksList} />
+      return <ToDoItemComponent key={item.task+index} items={tasksList} item={item} setTasksList={setTasksList} />
     })
   }
 
@@ -52,6 +70,11 @@ function App() {
           className='bg-black text-white rounded-md m-5 px-4 py-2'
         >Add</button>
       </form>
+
+      <button 
+          className='bg-blue-600 text-white rounded-md m-5 px-4 py-2'
+          onClick={clearLocalStorage}
+        >Clear storage</button>
       
       <hr />
 

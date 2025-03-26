@@ -1,5 +1,5 @@
 interface ITodoItem {
-  id?: number,
+  id?: string,
   task: string, 
   description: string
 }

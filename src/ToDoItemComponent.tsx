@@ -9,13 +9,11 @@ interface TodoItemProps {
 const ToDoItemComponent = (props: TodoItemProps) => {
 
   const handleDeleteTask = () => {
-    let indexToBeDeleted = props.item.id;
-    let setTasksList = props.setTasksList;
-    setTasksList(() => {
-      let copyItems = [...props.items];
-      return copyItems.filter(x => x.id != indexToBeDeleted);
-    });
-
+    let idToBeDeleted = props.item.id;
+    let copyItems = [...props.items];
+    copyItems = copyItems.filter(x => x.id !== idToBeDeleted);
+    window.localStorage.setItem("todos", JSON.stringify(copyItems));
+    props.setTasksList(copyItems);
   }
 
   return (
@@ -34,7 +32,9 @@ const ToDoItemComponent = (props: TodoItemProps) => {
       
       <button 
         className='bg-red-400 text-white rounded-md m-5 px-4 py-2'
-        onClick={handleDeleteTask}
+        onClick={() => {
+          handleDeleteTask()
+        }}
       >Delete
       </button>
     </div>
