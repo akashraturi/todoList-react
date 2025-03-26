@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import ITodoItem from './ITodoItem'
 
 interface TodoItemProps {
